@@ -4,31 +4,49 @@ var formEl = document.querySelector("#task-form"); // Listen to an event happend
 //var buttonEl = window.document.querySelector("#save-task"); // query selector for #save-task id element
 var tasksToDoEl = document.querySelector("#tasks-to-do"); // query selector for #tasks-to-do id element
 
+var createTaskEl = function(taskDataObj) {
 
-var createTaskHandler = function(event) { // Function to add task which is called by buttonEl onced clicked.
-    event.preventDefault();
 
-    var taskNameInput = document.querySelector("input[name='task-name']").value; // query selector for input task name
-    var taskTypeInput = document.querySelector("select[name='task-type']").value; // query selector for input task type
-    
     // create list item
     var listItemEl = document.createElement("li");
     listItemEl.className = "task-item";
 
-    // create div to hold task info and add to list item
-    var taskInfoEl = document.createElement("div");
+    var taskInfoEl = document.createElement("div"); // create div to hold task info and add to list item
 
-    // give it a class name
-    taskInfoEl.className = "task-info";
+    taskInfoEl.className = "task-info"; // give it a class name
 
-    // add HTML content to div
-    taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskNameInput + "</h3><span class='task-type'>" + taskTypeInput + "</span>"; // Task information
+    taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>"; // Task information // add HTML content to div
+
     listItemEl.appendChild(taskInfoEl);// Send the task to the parent which will inherit the styles.
 
     // add entire list item to list
     tasksToDoEl.appendChild(listItemEl);
-  };
+
+
+}
+
+var taskFormHandler = function(event) { // Function to add task which is called by buttonEl onced clicked.
+    event.preventDefault();
+
+    var taskNameInput = document.querySelector("input[name='task-name']").value; // query selector for input task name
+    var taskTypeInput = document.querySelector("select[name='task-type']").value; // query selector for input task type
+
+    if (!taskNameInput || !taskTypeInput) {
+        alert("You need to fill out the task form!");
+        return false;
+      }
+
+    // package up data as an object
+    var taskDataObj = {
+    name: taskNameInput,
+    type: taskTypeInput
+    };
+
+    // send it as an argument to createTaskEl
+    createTaskEl(taskDataObj);
+    formEl.reset();
+};
 
 //buttonEl.addEventListener("click", createTaskHandler); // Add Task button
-formEl.addEventListener("submit", createTaskHandler); // Listen to submit on the form.
+formEl.addEventListener("submit", taskFormHandler); // Listen to submit on the form.
 
