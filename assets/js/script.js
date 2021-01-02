@@ -15,21 +15,7 @@ var createTaskHandler = function() { // Function to add task which is called by 
     listItemEl.className = "task-item";
     listItemEl.textContent = "This is a new task.";
     tasksToDoEl.appendChild(listItemEl);
-  }
+  };
 
 buttonEl.addEventListener("click", createTaskHandler); // Add Task button
-
-
-  var counter = 10;
-  var countdown = function() {
-      console.log(counter);
-      counter--;
-      if(counter === 0) {
-          console.log("blastoff");
-          clearInterval(startCountDown);
-      }
-  }
-
-var startCountDown = setInterval(countdown, 1000);
-
 
