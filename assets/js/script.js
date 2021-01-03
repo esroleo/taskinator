@@ -361,17 +361,25 @@ var loadTasks = function() { // save task function to local storage
     if (!savedTasks) {
       return false;
     }
-    console.log("Saved tasks found!");
+    //console.log("Saved tasks found!");
     // else, load up saved tasks
   
     // parse into array of objects
     savedTasks = JSON.parse(savedTasks);
   
+    // // loop through savedTasks array
+    // for (var i = 0; i < savedTasks.length; i++) {
+    //   // pass each task object into the `createTaskEl()` function
+    //   createTaskEl(savedTasks[i]);
+    // }
+
     // loop through savedTasks array
     for (var i = 0; i < savedTasks.length; i++) {
-      // pass each task object into the `createTaskEl()` function
-      createTaskEl(savedTasks[i]);
+        // pass each task object into the `createTaskEl()` function
+        createTaskEl(savedTasks[i]);
     }
+
+    
 }
 
 pageContentEl.addEventListener("click", taskButtonHandler); // Event listener for our main html content
