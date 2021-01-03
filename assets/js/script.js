@@ -1,4 +1,5 @@
 // Taskinator app!
+var pageContentEl = document.querySelector("#page-content"); // To hold our click event handler event bubbling
 var taskIdCounter = 0; // Unique Id counter for created tasks
 
 var formEl = document.querySelector("#task-form"); // Listen to an event happending on the entire form 
@@ -102,3 +103,19 @@ var taskFormHandler = function(event) { // Function to add task which is called 
 //buttonEl.addEventListener("click", createTaskHandler); // Add Task button
 formEl.addEventListener("submit", taskFormHandler); // Listen to submit on the form.
 
+var taskButtonHandler = function(event) { // funciton for our event listener
+    console.log(event.target);
+
+    if (event.target.matches(".delete-btn")) {
+        var taskId = event.target.getAttribute("data-task-id");
+        deleteTask(taskId);
+      }
+  };
+
+
+var deleteTask = function(taskId) {
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+    taskSelected.remove();
+};
+
+pageContentEl.addEventListener("click", taskButtonHandler); // Event listener for our main html content
