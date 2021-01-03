@@ -7,7 +7,6 @@ var tasksToDoEl = document.querySelector("#tasks-to-do"); // query selector for 
 
 var createTaskEl = function(taskDataObj) {
 
-
     // create list item
     var listItemEl = document.createElement("li");
     listItemEl.className = "task-item";
@@ -20,6 +19,10 @@ var createTaskEl = function(taskDataObj) {
     taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>"; // Task information // add HTML content to div
     listItemEl.appendChild(taskInfoEl);// Send the task to the parent which will inherit the styles.
 
+    var taskActionsEl = createTaskActions(taskIdCounter);
+    listItemEl.appendChild(taskActionsEl);
+    //console.log(taskActionsEl);
+
     // add entire list item to list
     tasksToDoEl.appendChild(listItemEl);
 
@@ -27,6 +30,52 @@ var createTaskEl = function(taskDataObj) {
     taskIdCounter++;
 
 }
+
+var createTaskActions = function(taskId) { //Function to create task actions
+
+    var actionContainerEl = document.createElement("div");
+    actionContainerEl.className = "task-actions";
+
+    // create edit button
+    var editButtonEl = document.createElement("button");
+    editButtonEl.textContent = "Edit";
+    editButtonEl.className = "btn edit-btn";
+    editButtonEl.setAttribute("data-task-id", taskId);
+
+    actionContainerEl.appendChild(editButtonEl);
+
+    // create delete button
+    var deleteButtonEl = document.createElement("button");
+    deleteButtonEl.textContent = "Delete";
+    deleteButtonEl.className = "btn delete-btn";
+    deleteButtonEl.setAttribute("data-task-id", taskId);
+
+    actionContainerEl.appendChild(deleteButtonEl);
+
+    var statusSelectEl = document.createElement("select");
+    statusSelectEl.className = "select-status";
+    statusSelectEl.setAttribute("name", "status-change");
+    statusSelectEl.setAttribute("data-task-id", taskId);
+
+    actionContainerEl.appendChild(statusSelectEl);
+
+    var statusChoices = ["To Do", "In Progress", "Completed"]; // Options to select
+
+    for (var i = 0; i < statusChoices.length; i++) { // loop and append options to the parent statusSelectEl select html element
+        // create option element
+        var statusOptionEl = document.createElement("option");
+        statusOptionEl.textContent = statusChoices[i];
+        statusOptionEl.setAttribute("value", statusChoices[i]);
+      
+        // append to select
+        statusSelectEl.appendChild(statusOptionEl);
+      }
+
+
+    return actionContainerEl;
+
+};
+
 
 var taskFormHandler = function(event) { // Function to add task which is called by buttonEl onced clicked.
     event.preventDefault();
