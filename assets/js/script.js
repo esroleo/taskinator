@@ -28,7 +28,25 @@ var createTaskEl = function(taskDataObj) {
     //console.log(taskActionsEl);
 
     // add entire list item to list
-    tasksToDoEl.appendChild(listItemEl);
+    //tasksToDoEl.appendChild(listItemEl);
+    
+    switch (taskDataObj.status) {
+        case "to do":
+        taskActionsEl.querySelector("select[name='status-change']").selectedIndex = 0;
+        tasksToDoEl.append(listItemEl);
+        break;
+        case "in progress":
+        taskActionsEl.querySelector("select[name='status-change']").selectedIndex = 1;
+        tasksInProgressEl.append(listItemEl);
+        break;
+        case "completed":
+        taskActionsEl.querySelector("select[name='status-change']").selectedIndex = 2;
+        tasksCompletedEl.append(listItemEl);
+        break;
+        default:
+        console.log("Something went wrong!");
+    }
+
 
     // add id to the taskData object received by our save tasks button.
     taskDataObj.id = taskIdCounter;
@@ -337,9 +355,30 @@ var saveTasks = function() { // save task function to local storage
 
 }
 
+var loadTasks = function() { // save task function to local storage
+    var savedTasks = localStorage.getItem("tasks");
+    // if there are no tasks, set tasks to an empty array and return out of the function
+    if (!savedTasks) {
+      return false;
+    }
+    console.log("Saved tasks found!");
+    // else, load up saved tasks
+  
+    // parse into array of objects
+    savedTasks = JSON.parse(savedTasks);
+  
+    // loop through savedTasks array
+    for (var i = 0; i < savedTasks.length; i++) {
+      // pass each task object into the `createTaskEl()` function
+      createTaskEl(savedTasks[i]);
+    }
+}
+
 pageContentEl.addEventListener("click", taskButtonHandler); // Event listener for our main html content
 pageContentEl.addEventListener("change", taskStatusChangeHandler); // Event listener of our main conent but will target change events rather than clicks.
 pageContentEl.addEventListener("dragstart", dragTaskHandler); // Event listener for the dragstart event handler
 pageContentEl.addEventListener("dragover", dropZoneDragHandler); // Event listener for the dragover event handler
 pageContentEl.addEventListener("drop", dropTaskHandler); // Evenet listener for the drop event handler
 pageContentEl.addEventListener("dragleave", dragLeaveHandler); // Used as drage leave to remove css styling
+
+loadTasks(); // Load existing tasks
