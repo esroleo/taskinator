@@ -1,4 +1,5 @@
 // Taskinator app!
+var taskIdCounter = 0; // Unique Id counter for created tasks
 
 var formEl = document.querySelector("#task-form"); // Listen to an event happending on the entire form 
 //var buttonEl = window.document.querySelector("#save-task"); // query selector for #save-task id element
@@ -11,17 +12,19 @@ var createTaskEl = function(taskDataObj) {
     var listItemEl = document.createElement("li");
     listItemEl.className = "task-item";
 
+    // add task id as a custom attribute
+    listItemEl.setAttribute("data-task-id", taskIdCounter);
+
     var taskInfoEl = document.createElement("div"); // create div to hold task info and add to list item
-
     taskInfoEl.className = "task-info"; // give it a class name
-
     taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>"; // Task information // add HTML content to div
-
     listItemEl.appendChild(taskInfoEl);// Send the task to the parent which will inherit the styles.
 
     // add entire list item to list
     tasksToDoEl.appendChild(listItemEl);
 
+    // increase task counter for next unique id
+    taskIdCounter++;
 
 }
 
