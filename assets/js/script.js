@@ -1,6 +1,8 @@
 // Taskinator app!
 var pageContentEl = document.querySelector("#page-content"); // To hold our click event handler event bubbling
 var taskIdCounter = 0; // Unique Id counter for created tasks
+var tasksInProgressEl = document.querySelector("#tasks-in-progress"); // Holds the space for div of task in progress
+var tasksCompletedEl = document.querySelector("#tasks-completed"); // Holds the space for div of tasks completed
 
 var formEl = document.querySelector("#task-form"); // Listen to an event happending on the entire form 
 //var buttonEl = window.document.querySelector("#save-task"); // query selector for #save-task id element
@@ -77,6 +79,22 @@ var createTaskActions = function(taskId) { //Function to create task actions
 
 };
 
+// Function that will be called if an item already exist. Aks being edited.
+var completeEditTask = function(taskName, taskType, taskId) {
+    console.log(taskName, taskType, taskId);
+    // find the matching task list item
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+
+    // set new values
+    taskSelected.querySelector("h3.task-name").textContent = taskName;
+    taskSelected.querySelector("span.task-type").textContent = taskType;
+
+    alert("Task Updated!");
+
+    formEl.removeAttribute("data-task-id"); // Reset form after editting
+    document.querySelector("#save-task").textContent = "Add Task"; // Change the button back to Add task.
+};
+
 
 var taskFormHandler = function(event) { // Function to add task which is called by buttonEl onced clicked.
     event.preventDefault();
@@ -89,14 +107,26 @@ var taskFormHandler = function(event) { // Function to add task which is called 
         return false;
       }
 
-    // package up data as an object
-    var taskDataObj = {
-    name: taskNameInput,
-    type: taskTypeInput
-    };
+    // Existing task will already have an attribute set, hence the below will pring if already created.
+    var isEdit = formEl.hasAttribute("data-task-id");
+    console.log(isEdit);
+    
 
-    // send it as an argument to createTaskEl
-    createTaskEl(taskDataObj);
+    // has data attribute, so get task id and call function to complete edit process
+    if (isEdit) {
+        var taskId = formEl.getAttribute("data-task-id");
+        completeEditTask(taskNameInput, taskTypeInput, taskId);
+    } 
+    // no data attribute, so create object as normal and pass to createTaskEl function
+    else {
+        var taskDataObj = {
+        name: taskNameInput,
+        type: taskTypeInput
+        };
+
+        createTaskEl(taskDataObj); // send it as an argument to createTaskEl
+    }
+   
     formEl.reset();
 };
 
@@ -148,4 +178,31 @@ var deleteTask = function(taskId) {
     taskSelected.remove();
 };
 
+var taskStatusChangeHandler = function(event) {
+    
+    console.log(event.target);
+
+    // get the task item's id
+    var taskId = event.target.getAttribute("data-task-id");
+
+    // get the currently selected option's value and convert to lowercase
+    var statusValue = event.target.value.toLowerCase();
+
+    // find the parent task item element based on the id
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+
+    if (statusValue === "to do") {
+        tasksToDoEl.appendChild(taskSelected);
+      } 
+      else if (statusValue === "in progress") {
+        tasksInProgressEl.appendChild(taskSelected);
+      } 
+      else if (statusValue === "completed") {
+        tasksCompletedEl.appendChild(taskSelected);
+      }
+
+};
+
 pageContentEl.addEventListener("click", taskButtonHandler); // Event listener for our main html content
+pageContentEl.addEventListener("change", taskStatusChangeHandler); // Event listener of our main conent but will target change events rather than clicks.
+
