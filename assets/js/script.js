@@ -34,11 +34,13 @@ var createTaskEl = function(taskDataObj) {
     taskDataObj.id = taskIdCounter;
     tasks.push(taskDataObj); // Push object at the end of array called tasks
 
+    saveTasks(); // Calling the save tasks function to local storage
+
     // increase task counter for next unique id
     taskIdCounter++;
 
-    console.log(taskDataObj);
-    console.log(taskDataObj.status);
+    //console.log(taskDataObj);
+    //console.log(taskDataObj.status);
 
 }
 
@@ -106,6 +108,8 @@ var completeEditTask = function(taskName, taskType, taskId) {
         }
     };
 
+    saveTasks(); // Calling the save tasks function to local storage
+
     alert("Task Updated!");
 
     formEl.removeAttribute("data-task-id"); // Reset form after editting
@@ -170,7 +174,7 @@ var taskButtonHandler = function(event) { // funciton for our event listener
   };
 
 var editTask = function(taskId) {
-    console.log("editing task #" + taskId);
+    //console.log("editing task #" + taskId);
 
     // get task list item element
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
@@ -208,7 +212,9 @@ var deleteTask = function(taskId) {
 
     // reassign tasks array to be the same as updatedTaskArr
     tasks = updatedTaskArr;
-    console.log(tasks);
+    //console.log(tasks);
+
+    saveTasks(); // Calling the save tasks function to local storage
 
 
 };
@@ -242,6 +248,8 @@ var taskStatusChangeHandler = function(event) {
         tasks[i].status = statusValue;
         }
     }
+
+    saveTasks(); // Calling the save tasks function to local storage
 
 };
 
@@ -309,6 +317,8 @@ var dropTaskHandler = function(event) {
         }
     }
     
+    saveTasks(); // Calling the save tasks function to local storage
+
     //console.log(tasks);
 
   };
@@ -319,6 +329,12 @@ var dragLeaveHandler = function(event) { // Function for the dragLeave handler
     if (taskListEl) {
     taskListEl.removeAttribute("style");
 }
+}
+
+var saveTasks = function() { // save task function to local storage
+    localStorage.setItem("tasks", tasks);
+    localStorage.setItem("tasks", JSON.stringify(tasks)); // Local storage cant hold naturally objects hence json stringify
+
 }
 
 pageContentEl.addEventListener("click", taskButtonHandler); // Event listener for our main html content
