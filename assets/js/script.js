@@ -227,7 +227,10 @@ var dropZoneDragHandler = function(event) { // dragover function()
     if (taskListEl) {
       event.preventDefault();
       //console.dir(taskListEl);
+      taskListEl.setAttribute("style", "background: rgba(68, 233, 255, 0.7); border-style: dashed;");
     }
+
+    
 };
 
 var dropTaskHandler = function(event) {
@@ -254,12 +257,23 @@ var dropTaskHandler = function(event) {
         statusSelectEl.selectedIndex = 2;
       }
 
+      dropZoneEl.removeAttribute("style");
+
       dropZoneEl.appendChild(draggableElement);
 
   };
+
+var dragLeaveHandler = function(event) { // Function for the dragLeave handler
+    ///console.dir(event.target);
+    var taskListEl = event.target.closest(".task-list");
+    if (taskListEl) {
+    taskListEl.removeAttribute("style");
+}
+}
 
 pageContentEl.addEventListener("click", taskButtonHandler); // Event listener for our main html content
 pageContentEl.addEventListener("change", taskStatusChangeHandler); // Event listener of our main conent but will target change events rather than clicks.
 pageContentEl.addEventListener("dragstart", dragTaskHandler); // Event listener for the dragstart event handler
 pageContentEl.addEventListener("dragover", dropZoneDragHandler); // Event listener for the dragover event handler
 pageContentEl.addEventListener("drop", dropTaskHandler); // Evenet listener for the drop event handler
+pageContentEl.addEventListener("dragleave", dragLeaveHandler); // Used as drage leave to remove css styling
